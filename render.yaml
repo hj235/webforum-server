@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: webforum-app
+    env: docker
+    dockerfilePath: ./Dockerfile
+    buildCommand: "" # Leave empty if no build command is needed
+    startCommand: "/app/serverbin"
+    envVars:
+      - key: SERVER_PORT
+        value: "4000"
+      - key: CLIENT_URL
+        value: "http://localhost:5173"
+      - key: MYSQL_DSN
+        value: "root:password@tcp(webforum-db:3306)/webforum"
+      - key: MYSQL_ROOT_PASSWORD
+        value: "password"
+      - key: MYSQL_PORT
+        value: "3306"
+      - key: MYSQL_DATABASE
+        value: "webforum"
+    ports:
+      - 4000
+
+  - type: database
+    name: webforum-db
+    databaseType: mysql
+    env: managed
+    disk:
+      sizeGB: 1 # Adjust disk size as needed
+    version: "8" # MySQL version
+    envVars:
+      - key: MYSQL_ROOT_PASSWORD
+        value: "password"
+      - key: MYSQL_PORT
+        value: "3306"
+      - key: MYSQL_DATABASE
+        value: "webforum"

@@ -1,0 +1,29 @@
+services:
+  server:
+    image: webforum-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '4000:4000'
+    depends_on:
+      - mysql-db
+    environment:
+      SERVER_PORT: ${SERVER_PORT}
+      CLIENT_URL: ${CLIENT_URL}
+      MYSQL_DSN: ${MYSQL_DSN}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+  mysql-db:
+    image: mysql
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./internal/database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    environment:
+      CLIENT_URL: ${CLIENT_URL}
+      MYSQL_DSN: ${MYSQL_DSN}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
